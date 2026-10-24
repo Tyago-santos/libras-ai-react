@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-background font-sans text-on-surface;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
+  }
+
+  /* Safe areas (fiel ao <style> original do Stitch) */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* =========================================================
+   Shell responsivo — Desktop (>= 1024px)
+   No desktop a sidebar (DesktopSidebar.jsx) substitui o
+   header fixo e a bottom nav de cada tela.
+   ========================================================= */
+@media (min-width: 1024px) {
+  /* Sumir com header e bottom nav das telas */
+  header.fixed,
+  nav.fixed.bottom-0 {
+    display: none !important;
+  }
+
+  /* Sem header fixo, o conteúdo não precisa do offset pt-16/pt-22 */
+  main {
+    padding-top: 1.5rem !important;
+  }
+}

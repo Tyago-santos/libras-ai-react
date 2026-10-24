@@ -121,63 +121,11 @@ export default function TraduzirAvatarSinalizando() {
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-2">
 <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Transcrição em áudio</span>
-<span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">
-          Em tradução
-        </span>
-</div>
-<div className="flex items-center gap-1">
-<button className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors" title="Copiar texto">
-<span className="material-symbols-outlined text-[18px]">content_copy</span>
-</button>
-<button className="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors" title="Opções de acessibilidade">
-<span className="material-symbols-outlined text-[18px]">format_size</span>
-</button>
 </div>
 </div>
 <div className="font-headline-sm text-headline-sm text-on-surface leading-snug line-clamp-2">
           {incomingText ? `“${incomingText}”` : "Aguardando frase do fluxo de voz ou texto…"}
         </div>
-<div className="pt-space-xs flex items-center justify-between border-t border-surface-container-high/40">
-<div className="flex items-center gap-2">
-<div className="flex items-end gap-1 h-5 px-1">
-<span className="w-1 bg-primary rounded-full animate-bounce h-3" style={{animationDelay: "0.1s"}}></span>
-<span className="w-1 bg-primary rounded-full animate-bounce h-5" style={{animationDelay: "0.25s"}}></span>
-<span className="w-1 bg-primary rounded-full animate-bounce h-2" style={{animationDelay: "0.15s"}}></span>
-<span className="w-1 bg-primary rounded-full animate-bounce h-4" style={{animationDelay: "0.3s"}}></span>
-<span className="w-1 bg-primary rounded-full animate-bounce h-3" style={{animationDelay: "0.05s"}}></span>
-</div>
-<span className="font-label-sm text-label-sm text-on-surface-variant">Captação de voz contínua</span>
-</div>
-<span className="font-label-sm text-label-sm text-tertiary font-semibold flex items-center gap-1">
-<span className="material-symbols-outlined text-[14px]">graphic_eq</span>
-        Sensibilidade ideal
-      </span>
-</div>
-</div>
-<div className="w-full pt-space-xs pb-space-sm flex flex-col items-center justify-center space-y-space-sm">
-<div className="relative flex items-center justify-center">
-<div className="absolute w-24 h-24 rounded-full bg-primary/10 animate-ping pointer-events-none"></div>
-<div className="absolute w-20 h-20 rounded-full bg-primary/20 pointer-events-none"></div>
-<button aria-label="Pausar captação de voz" className="relative z-10 w-16 h-16 rounded-full bg-primary text-on-primary shadow-xl hover:bg-primary-container active:scale-95 transition-all flex items-center justify-center focus:outline-none" id="mic-action-btn" onClick={() => navigate("/ouvindo-fala")}>
-<span className="material-symbols-outlined text-[32px]">mic</span>
-</button>
-</div>
-<div className="flex flex-col items-center text-center">
-<span className="font-label-md text-label-md text-on-surface font-semibold">Ouvindo sua fala...</span>
-<p className="font-body-sm text-body-sm text-on-surface-variant">
-        Fale à vontade. O avatar traduz sequencialmente.
-      </p>
-</div>
-<div className="flex items-center gap-space-md pt-space-xs">
-<button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md min-h-[44px]">
-<span className="material-symbols-outlined text-[18px]">pause</span>
-<span>Pausar fala</span>
-</button>
-<button className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-error-container text-on-error-container hover:opacity-90 transition-opacity font-label-md text-label-md min-h-[44px]">
-<span className="material-symbols-outlined text-[18px]">stop_circle</span>
-<span>Finalizar</span>
-</button>
-</div>
 </div>
 </div>
 </main><nav className="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_-2px_12px_rgba(23,43,58,0.06)]" data-active-classes="text-primary-container font-semibold"><div className="flex items-center justify-around h-16 px-space-sm max-w-md mx-auto"><a aria-current="page" className="flex flex-col items-center justify-center flex-1 h-full py-1 transition-colors min-h-[48px] text-primary-container font-semibold" href="#" onClick={(e) => { e.preventDefault(); navigate("/"); }}><span className="material-symbols-outlined text-[24px]">translate</span><span className="font-label-sm text-label-sm mt-0.5">Traduzir</span></a><a className="flex flex-col items-center justify-center flex-1 h-full py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px]" href="#" onClick={(e) => { e.preventDefault(); navigate("/historico"); }}><span className="material-symbols-outlined text-[24px]">history</span><span className="font-label-sm text-label-sm mt-0.5">Histórico</span></a><a className="flex flex-col items-center justify-center flex-1 h-full py-1 text-on-surface-variant hover:text-on-surface transition-colors min-h-[48px]" href="#" onClick={(e) => { e.preventDefault(); navigate("/configuracoes"); }}><span className="material-symbols-outlined text-[24px]">settings</span><span className="font-label-sm text-label-sm mt-0.5">Configurações</span></a></div></nav>

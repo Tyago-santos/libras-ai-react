@@ -51,13 +51,6 @@ export default function TraduzirProntoParaOuvir() {
 <div aria-hidden="true" className="absolute top-1/3 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full bg-primary-container/20 blur-3xl animate-pulse pointer-events-none"></div>
 <img alt="A modern, warm, friendly 3D digital human character designed as a Brazilian Sign Language (Libras) interpreter. Upper torso view, centered framing, neutral receptive resting posture with both hands clearly visible and relaxed in front of the chest in the signing area. Wearing a clean minimalist deep navy t-shirt. Expressive, welcoming facial expression, bright natural studio lighting, soft neutral background with crisp accessibility clarity and subtle primary blue accents." className="relative z-10 w-full h-full object-contain max-h-[300px] lg:max-h-[440px] select-none animate-avatar-breathe" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmBw3MbUkfTw__TsbtKcPtLsyPvDSz62hU6I9LDY8CLwnmG_A0PJrTfa2-VR2BMg5-kWGaOCxnWn4nyFFZ1EKdgHb4Euu5GnEyAtMQcoWWVZbBfR3dzDefG4lkDeq4iygYVgHvoHw3vKMmlc_deSdi3pIWXBNi4YJD236bT-CMtv_YZ-5xYEPL2C5pxb-FkENmUSstMebREBR0gAv-ZQ83Ujf737zud44ANcZesghcKZycQMO6i_Y"/>
 </div>
-<div className="relative z-10 flex items-center justify-between px-2 pt-1">
-<span className="font-label-sm text-label-sm text-outline flex items-center gap-1">
-<span className="material-symbols-outlined text-[14px]">pan_tool</span>
-        Espaço de sinalização calibrado
-      </span>
-<span className="font-label-sm text-label-sm text-primary font-semibold">VLibras v4.2</span>
-</div>
 </section>
 <div className="flex flex-col gap-space-md lg:row-start-2 lg:col-start-2">
 <section className="w-full bg-surface-container-lowest rounded-2xl p-3 sm:p-4 shadow-sm flex flex-col gap-2">

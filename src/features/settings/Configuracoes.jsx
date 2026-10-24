@@ -106,16 +106,6 @@ export default function Configuracoes() {
 </button>
 </div>
 <div className="h-px bg-surface-container-high w-full"></div>
-<div className="flex items-center justify-between py-1 min-h-[48px]">
-<div className="flex flex-col pr-2">
-<span className="font-label-lg text-label-lg text-on-surface">Sensibilidade do Microfone</span>
-<span className="font-body-sm text-body-sm text-on-surface-variant">Calibrado para diálogo presencial e clareza acústica</span>
-</div>
-<div className="flex items-center gap-1.5 px-3 py-1 bg-surface-container-high rounded-full shrink-0">
-<span className="w-2 h-2 rounded-full bg-tertiary"></span>
-<span className="font-label-sm text-label-sm text-on-surface">Otimizada</span>
-</div>
-</div>
 </div>
 </section>
 <section className="mb-space-lg flex flex-col gap-space-sm">

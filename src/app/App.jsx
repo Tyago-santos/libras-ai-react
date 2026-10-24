@@ -5,8 +5,7 @@ import {
   TraduzirOuvindoFala,
   TraduzirAvatarSinalizando,
 } from "../features/translation/index.js";
-import { OuvindoTempoReal, ProntoInativo } from "../features/session/index.js";
-import { HistoricoConversas, HistoricoSessoes } from "../features/history/index.js";
+import { HistoricoConversas } from "../features/history/index.js";
 import { Configuracoes, Acessibilidade } from "../features/settings/index.js";
 
 export default function App() {
@@ -23,12 +22,10 @@ export default function App() {
             <Route path="/" element={<TraduzirProntoParaOuvir />} />
             <Route path="/ouvindo-fala" element={<TraduzirOuvindoFala />} />
             <Route path="/avatar-sinalizando" element={<TraduzirAvatarSinalizando />} />
-            <Route path="/tempo-real" element={<OuvindoTempoReal />} />
-            <Route path="/pronto-inativo" element={<ProntoInativo />} />
 
             {/* Histórico */}
             <Route path="/historico" element={<HistoricoConversas />} />
-            <Route path="/sessoes" element={<HistoricoSessoes />} />
+            <Route path="/sessoes" element={<Navigate to="/historico" replace />} />
 
             {/* Configurações */}
             <Route path="/configuracoes" element={<Configuracoes />} />

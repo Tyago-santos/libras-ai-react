@@ -26,14 +26,6 @@ export default function TraduzirProntoParaOuvir() {
 <span className="w-2.5 h-2.5 rounded-full bg-tertiary-container animate-pulse"></span>
 <span className="font-label-sm text-label-sm text-on-surface-variant font-semibold">Pronto para ouvir</span>
 </div>
-<div className="flex items-center gap-1.5 bg-surface-container-low p-1 rounded-full shadow-sm">
-<button aria-label="Ajustar velocidade do avatar" className="px-2.5 py-1 rounded-full text-on-surface-variant hover:bg-surface-container-highest transition-colors font-label-sm text-label-sm" type="button">
-        1.0x
-      </button>
-<button aria-label="Recentralizar câmera do avatar" className="w-7 h-7 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-highest transition-colors" type="button">
-<span className="material-symbols-outlined text-[18px]">center_focus_strong</span>
-</button>
-</div>
 </div>
 <section aria-label="Palco virtual do intérprete de Libras 3D" className="relative w-full aspect-[4/3.4] sm:aspect-[4/3] rounded-3xl bg-gradient-to-b from-surface-container-lowest via-surface-container-lowest to-surface-container-low p-3 shadow-md flex flex-col justify-between overflow-hidden">
 <div className="relative z-10 flex items-center justify-between w-full px-1">

@@ -49,6 +49,8 @@ let snapshot = {
   interim: "",
   finalText: "",
   error: null,
+  /** Fase do ciclo de captura: null → "audio" → "som" → "fala". */
+  phase: null,
 };
 
 const emit = (patch) => {
@@ -63,7 +65,13 @@ const createRecognition = () => {
   rec.interimResults = true;
   rec.maxAlternatives = 1;
 
-  rec.onstart = () => emit({ listening: true, error: null });
+  rec.onstart = () => emit({ listening: true, error: null, phase: null });
+
+  // Diagnóstico honesto do ciclo de captura: mostra em que pé está a voz
+  // (microfone ativo → som detectado → fala detectada → transcrição).
+  rec.onaudiostart = () => emit({ phase: "audio" });
+  rec.onsoundstart = () => emit({ phase: "som" });
+  rec.onspeechstart = () => emit({ phase: "fala" });
 
   rec.onresult = (event) => {
     let interim = "";
@@ -90,6 +98,7 @@ const createRecognition = () => {
     if (FATAL_ERRORS.has(code)) shouldListen = false;
     emit({
       listening: false,
+      phase: null,
       error: message ?? snapshot.error,
       supported: code === "language-not-supported" ? false : snapshot.supported,
     });
@@ -102,11 +111,11 @@ const createRecognition = () => {
       try {
         rec.start();
       } catch {
-        emit({ listening: false });
+        emit({ listening: false, phase: null });
       }
       return;
     }
-    emit({ listening: false });
+    emit({ listening: false, phase: null });
   };
 
   return rec;

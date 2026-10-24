@@ -168,9 +168,15 @@ export default function TraduzirOuvindoFala() {
 <span className="font-label-sm text-label-sm">
           {speech.error
             ? "Ditado indisponível — use o teclado"
-            : speech.listening
-              ? "Transcrevendo sua fala em tempo real"
-              : "Aguardando fala"}
+            : speech.phase === "fala"
+              ? "Fala detectada — transcrevendo…"
+              : speech.phase === "som"
+                ? "Som detectado — falando…"
+                : speech.phase === "audio"
+                  ? "Microfone ativo — fale agora"
+                  : speech.listening
+                    ? "Transcrevendo sua fala em tempo real"
+                    : "Aguardando fala"}
         </span>
 </div>
 <div className="flex items-center gap-1 bg-surface-container px-2.5 py-1 rounded-full text-on-surface-variant">

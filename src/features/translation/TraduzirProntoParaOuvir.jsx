@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { speechEngine } from "../speech";
 
 export default function TraduzirProntoParaOuvir() {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ export default function TraduzirProntoParaOuvir() {
 </div>
 </section>
 <div className="w-full flex flex-col items-center gap-3 pt-2">
-<button aria-label="Começar a ouvir voz para traduzir para Libras" className="group relative w-full max-w-sm h-16 bg-primary-container text-on-primary-container rounded-2xl shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden" id="mic-action-btn" type="button" onClick={() => navigate("/ouvindo-fala")}>
+<button aria-label="Começar a ouvir voz para traduzir para Libras" className="group relative w-full max-w-sm h-16 bg-primary-container text-on-primary-container rounded-2xl shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all duration-200 cursor-pointer overflow-hidden" id="mic-action-btn" type="button" onClick={() => { speechEngine.start(); navigate("/ouvindo-fala"); }}>
 <span className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></span>
 <div className="w-10 h-10 rounded-full bg-on-primary-container/20 flex items-center justify-center">
 <span className="material-symbols-outlined text-[24px] text-on-primary-container">mic</span>

@@ -3,7 +3,7 @@ import { speechEngine } from "./speechEngine";
 
 /**
  * Assina o motor de ditado compartilhado entre as telas.
- * `supported`/`listening`/`interim`/`finalText`/`error` refletem o estado real.
+ * `supported`/`listening`/`transcribing`/`finalText`/`error` refletem o estado real.
  */
 export function useSpeechRecognition() {
   const state = useSyncExternalStore(

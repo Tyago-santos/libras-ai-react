@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSpeechRecognition, useMicLevel } from "../speech";
+import { useSpeechRecognition } from "../speech";
 import { useVlibrasPlayer } from "../avatar";
 
 /**
- * Escuta com tradução EM TEMPO REAL:
- * - Web Speech API (pt-BR) transcreve enquanto você fala;
- * - cada frase finalizada entra numa fila e é sinalizada pelo avatar
+ * Escuta com transcrição via backend (Gemini):
+ * - o app grava a fala (MediaRecorder) e corta na pausa natural;
+ * - o backend transcreve em prosa pt-BR (POST /api/transcribe);
+ * - cada frase confirmada entra numa fila e é sinalizada pelo avatar
  *   assim que ele fica livre (sem interromper o sinal em andamento);
- * - interim (parcial) aparece na tela para feedback imediato.
+ * - sem texto "ao vivo": o feedback honesto é gravando → transcrevendo.
  */
 export default function TraduzirOuvindoFala() {
   const navigate = useNavigate();
   const speech = useSpeechRecognition();
   const player = useVlibrasPlayer();
-  const level = useMicLevel(speech.listening);
+  const level = speech.level; // amplitude REAL durante a gravação
 
   /** Quantos caracteres do finalText já foram para a fila. */
   const consumedRef = useRef(0);
@@ -30,22 +31,21 @@ export default function TraduzirOuvindoFala() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const transcript = [speech.finalText, speech.interim]
-    .filter(Boolean)
-    .join(" ")
-    .trim();
+  const transcript = speech.finalText.trim();
 
   const temErro = Boolean(speech.error) || !speech.supported;
 
   const chipLabel = !speech.supported
-    ? "Ditado indisponível"
+    ? "Gravação indisponível"
     : speech.error
       ? "Microfone indisponível"
-      : speech.listening
-        ? "Ouvindo você..."
-        : speech.paused || speech.stopped
-          ? "Captação pausada"
-          : "Iniciando ditado…";
+      : speech.transcribing
+        ? "Transcrevendo…"
+        : speech.listening
+          ? "Ouvindo você..."
+          : speech.paused || speech.stopped
+            ? "Captação pausada"
+            : "Preparando microfone…";
 
   // Toda fala FINALIZADA pelo reconhecimento vira uma frase da fila.
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function TraduzirOuvindoFala() {
   }, [player.status, speech.finalText]);
 
   const toggleMic = () => {
-    if (speech.listening) {
+    if (speech.listening || speech.transcribing) {
       speech.stop();
     } else {
       speech.start({ keepText: true });
@@ -92,14 +92,6 @@ export default function TraduzirOuvindoFala() {
 <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-surface-container-lowest/40 pointer-events-none"></div>
 {/* Sombra volumétrica inferior */}
 <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-surface-container-lowest/80 to-transparent pointer-events-none"></div>
-<div className="absolute top-space-sm right-space-sm flex items-center gap-space-xs z-10">
-<button aria-label="Ajustar velocidade de reprodução" className="h-9 px-3 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface shadow-sm flex items-center justify-center font-label-sm text-label-sm hover:bg-surface-container transition-colors" id="speedBtn" type="button">
-<span className="text-primary font-bold">1.0x</span>
-</button>
-<button aria-label="Recentralizar visualização do avatar" className="w-9 h-9 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface-variant shadow-sm flex items-center justify-center hover:bg-surface-container transition-colors" type="button">
-<span className="material-symbols-outlined text-[20px]">center_focus_strong</span>
-</button>
-</div>
 <div className="relative z-10 mb-space-md flex flex-col items-center">
 <div className={`inline-flex items-center gap-space-sm px-4 py-1.5 rounded-full backdrop-blur-md shadow-sm ${temErro ? "bg-error-container/90 text-on-error-container" : "bg-secondary-container/90 text-on-secondary-container"}`}>
 <span className="relative flex h-2.5 w-2.5">
@@ -128,7 +120,7 @@ export default function TraduzirOuvindoFala() {
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-space-xs">
 <span className="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-wider font-bold">
-          Tempo Real
+          Voz
         </span>
 <span className="font-label-md text-label-md text-on-surface-variant font-medium">Você disse:</span>
 </div>
@@ -144,19 +136,18 @@ export default function TraduzirOuvindoFala() {
 <div className="min-h-[58px] flex items-baseline flex-wrap">
 <p className="font-body-lg text-body-lg text-on-surface font-medium leading-relaxed line-clamp-2" id="liveTranscript">
         {transcript ? (
-          <>
-            {speech.finalText && <span>{speech.finalText} </span>}
-            {speech.interim && <span className="text-on-surface-variant">{speech.interim}</span>}
-          </>
+          <span>{transcript}</span>
         ) : (
           <span className="text-on-surface-variant font-normal">
             {speech.error
               ? speech.error
               : !speech.supported
-                ? "Seu navegador não suporta ditado por voz — use o teclado."
-                : speech.listening
-                  ? "Comece a falar… o avatar sinaliza frase a frase"
-                  : "Aguardando permissão do microfone…"}
+                ? "Seu navegador não permite gravar áudio — use o teclado."
+                : speech.transcribing
+                  ? "Transcrevendo sua fala…"
+                  : speech.listening
+                    ? "Fale à vontade — cada frase é transcrita e entra na fila"
+                    : "Toque no microfone para começar a falar"}
           </span>
         )}
       </p>
@@ -164,19 +155,17 @@ export default function TraduzirOuvindoFala() {
 </div>
 <div className="pt-space-xs flex items-center justify-between">
 <div className="flex items-center gap-1.5 text-on-surface-variant">
-<span className={`material-symbols-outlined text-[16px] text-primary ${speech.listening ? "animate-spin" : ""}`}>{speech.listening ? "sync" : "graphic_eq"}</span>
+<span className={`material-symbols-outlined text-[16px] text-primary ${speech.listening || speech.transcribing ? "animate-spin" : ""}`}>{speech.listening || speech.transcribing ? "sync" : "graphic_eq"}</span>
 <span className="font-label-sm text-label-sm">
           {speech.error
-            ? "Ditado indisponível — use o teclado"
-            : speech.phase === "fala"
-              ? "Fala detectada — transcrevendo…"
-              : speech.phase === "som"
-                ? "Som detectado — falando…"
-                : speech.phase === "audio"
-                  ? "Microfone ativo — fale agora"
-                  : speech.listening
-                    ? "Transcrevendo sua fala em tempo real"
-                    : "Aguardando fala"}
+            ? "Microfone indisponível — use o teclado"
+            : speech.transcribing
+              ? "Transcrevendo no servidor…"
+              : speech.listening
+                ? "Gravando — para sozinho quando você fala mais baixo"
+                : speech.paused || speech.stopped
+                  ? "Captação pausada — toque para voltar"
+                  : "Aguardando fala"}
         </span>
 </div>
 <div className="flex items-center gap-1 bg-surface-container px-2.5 py-1 rounded-full text-on-surface-variant">
@@ -197,15 +186,15 @@ export default function TraduzirOuvindoFala() {
 <div className="relative flex items-center justify-center">
 <span className="absolute inline-flex w-24 h-24 rounded-full bg-primary/20 animate-ping opacity-60 pointer-events-none"></span>
 <span className="absolute inline-flex w-20 h-20 rounded-full bg-primary/30 pointer-events-none"></span>
-<button aria-label={speech.listening ? "Parar de ouvir" : "Começar a ouvir"} className="relative z-10 w-[72px] h-[72px] rounded-full bg-primary text-on-primary shadow-xl flex items-center justify-center hover:bg-on-primary-fixed-variant active:scale-95 transition-all focus:outline-none" id="toggleMicBtn" type="button" onClick={toggleMic}>
-<span className="material-symbols-outlined text-[32px]" style={{fontVariationSettings: "'FILL' 1"}}>{speech.listening ? "stop" : "mic"}</span>
+<button aria-label={speech.listening || speech.transcribing ? "Parar de ouvir" : "Começar a ouvir"} className="relative z-10 w-[72px] h-[72px] rounded-full bg-primary text-on-primary shadow-xl flex items-center justify-center hover:bg-on-primary-fixed-variant active:scale-95 transition-all focus:outline-none" id="toggleMicBtn" type="button" onClick={toggleMic}>
+<span className="material-symbols-outlined text-[32px]" style={{fontVariationSettings: "'FILL' 1"}}>{speech.listening || speech.transcribing ? "stop" : "mic"}</span>
 </button>
 </div>
 <div className="text-center">
-<p className="font-label-lg text-label-lg text-on-surface font-bold tracking-tight">{speech.listening ? "Parar de ouvir" : "Começar a ouvir"}</p>
+<p className="font-label-lg text-label-lg text-on-surface font-bold tracking-tight">{speech.transcribing ? "Transcrevendo…" : speech.listening ? "Parar de ouvir" : "Começar a ouvir"}</p>
 <span className="font-label-sm text-label-sm text-on-surface-variant">
-  {speech.listening
-    ? "A tradução acontece enquanto você fala — toque para pausar"
+  {speech.listening || speech.transcribing
+    ? "Cada frase falada vira texto e entra na fila do avatar — toque para parar"
     : "Toque para voltar a falar — a fila continua de onde parou"}
 </span>
 </div>
